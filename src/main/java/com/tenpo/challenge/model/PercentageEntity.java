@@ -14,6 +14,7 @@ import java.time.Instant;
 @Table(name = "percentage_entity")
 public class PercentageEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Double percentage;
     private Instant timestamp;

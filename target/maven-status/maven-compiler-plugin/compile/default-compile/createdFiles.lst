@@ -1,0 +1,4 @@
+com/tenpo/challenge/controller/ApiController.class
+com/tenpo/challenge/ChallengeApplication.class
+com/tenpo/challenge/configuration/MockServerConfig.class
+com/tenpo/challenge/service/ExternalService.class

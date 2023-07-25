@@ -1,6 +1,6 @@
 package com.tenpo.challenge.controller;
 
-import com.tenpo.challenge.service.ExternalService;
+import com.tenpo.challenge.service.ExternalPercentageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +11,10 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/")
 public class ApiController {
-    private final ExternalService externalService;
+    private final ExternalPercentageService externalService;
 
     @Autowired
-    public ApiController(ExternalService externalService) {
+    public ApiController(ExternalPercentageService externalService) {
         this.externalService = externalService;
     }
 

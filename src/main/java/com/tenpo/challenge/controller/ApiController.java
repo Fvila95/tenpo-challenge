@@ -21,10 +21,6 @@ public class ApiController {
     @GetMapping("/api-rest")
     public Mono<Double> calculateSum(@RequestParam double num1, @RequestParam double num2) {
         double sum = num1 + num2;
-        double percentage = externalService.getPercentage();
-        double result = sum + sum * (percentage / 100);
-
-        // Devuelve el resultado envuelto en un Mono porque estamos utilizando WebFlux
-        return Mono.just(result);
+        return externalService.getPercentage().map(percentage -> sum + sum * (percentage / 100));
     }
 }

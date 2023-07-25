@@ -12,3 +12,7 @@ services:
     ports:
       - 1080:1080
     command: -logLevel INFO
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'

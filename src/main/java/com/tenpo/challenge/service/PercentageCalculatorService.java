@@ -10,11 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
-import java.time.Instant;
 
 @Service
 public class PercentageCalculatorService {
@@ -35,12 +34,18 @@ public class PercentageCalculatorService {
     public Mono<Double> calculatePercentage() {
         return redisTemplate.opsForValue().get("percentage")
                 .switchIfEmpty(externalPercentageClient.getPercentage()
-                        .map(percentageEntity -> percentageRepository.save(percentageEntity))
+                        .flatMap(percentageEntity -> Mono.fromCallable(() -> percentageRepository.save(percentageEntity))
+                                .subscribeOn(Schedulers.boundedElastic())
+                                .thenReturn(percentageEntity))
                         .onErrorResume(ExternalPercentageException.class, e -> {
                             logger.error("An error occurred while calling the External Percentage Service: {}", e);
-                            return Mono.just(percentageRepository.findTopByOrderByIdDesc())
+                            return Mono.just(percentageRepository.findFirstByOrderByIdDesc())
                                     .onErrorMap(throwable -> new PercentageEntityException(throwable.getMessage()));
                         })
-                        .flatMap(percentageEntity -> redisTemplate.opsForValue().set("percentage", percentageEntity.getPercentage(), Duration.ofMinutes(30)).thenReturn(percentageEntity.getPercentage())));
+                        .flatMap(this::storePercentageInCache));
+    }
+
+    private Mono<Double> storePercentageInCache(PercentageEntity percentageEntity) {
+        return redisTemplate.opsForValue().set("percentage", percentageEntity.getPercentage(), Duration.ofMinutes(30)).thenReturn(percentageEntity.getPercentage());
     }
 }

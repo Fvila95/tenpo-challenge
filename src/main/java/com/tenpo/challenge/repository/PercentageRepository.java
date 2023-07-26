@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface PercentageRepository extends JpaRepository<PercentageEntity, Long> {
-    PercentageEntity findTopByOrderByIdDesc();
+    PercentageEntity findFirstByOrderByIdDesc();
 
 }
 

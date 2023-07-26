@@ -1,6 +1,5 @@
 package com.tenpo.challenge.aspect;
 
-import com.tenpo.challenge.exception.TooManyRequestsException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -48,17 +49,21 @@ public class RPMLimiterAspect {
                 .flatMap(count -> {
                     if (count <= MAX_REQUESTS_PER_MINUTE) {
                         logger.info("RPM limit not exceeded. Proceeding with method: {}.{}", controllerName, methodName);
-                        return Mono.fromCallable(() -> {
-                            try {
-                                return joinPoint.proceed();
-                            } catch (Throwable e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+                        try {
+                            return Mono.just(joinPoint.proceed());
+                        } catch (TooManyRequestsException e) {
+                            logger.warn("TooManyRequestsException handled for {}.{}", controllerName, methodName);
+                            return Mono.just(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Too many requests. Please try again later."));
+                        } catch (Throwable e) {
+                            return Mono.just(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Too many requests. Please try again later."));
+                        }
                     } else {
                         logger.warn("RPM limit exceeded for {}.{}", controllerName, methodName);
-                        return Mono.error(new TooManyRequestsException("Too many requests. Please try again later."));
+                        return Mono.just(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Too many requests. Please try again later."));
                     }
+                }).onErrorResume(TooManyRequestsException.class, ex -> {
+                    logger.warn("TooManyRequestsException handled for {}.{}", controllerName, methodName);
+                    return Mono.just(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage()));
                 });
     }
 
@@ -66,4 +71,11 @@ public class RPMLimiterAspect {
         return "127.0.0.1";
     }
 
+    // Custom exception for handling too many requests
+//    @SuppressWarnings("serial")
+    public static class TooManyRequestsException extends RuntimeException {
+        public TooManyRequestsException(String message) {
+            super(message);
+        }
+    }
 }

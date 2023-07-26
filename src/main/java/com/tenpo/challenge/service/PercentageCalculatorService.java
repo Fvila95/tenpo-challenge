@@ -2,7 +2,7 @@ package com.tenpo.challenge.service;
 
 import com.tenpo.challenge.client.ExternalPercentageClient;
 import com.tenpo.challenge.exception.ExternalPercentageException;
-import com.tenpo.challenge.exception.PercentageEntityException;
+import com.tenpo.challenge.exception.PercentageCalculationException;
 import com.tenpo.challenge.model.PercentageCalculation;
 import com.tenpo.challenge.repository.PercentageCalculationRepository;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class PercentageCalculatorService {
                             logger.error("An error occurred while calling the External Percentage Service: {}", e);
                             return Mono.just(percentageCalculationRepository.findFirstByOrderByIdDesc())
                                     .map(PercentageCalculation::getPercentage)
-                                    .onErrorMap(throwable -> new PercentageEntityException(throwable.getMessage()));
+                                    .onErrorMap(throwable -> new PercentageCalculationException(throwable.getMessage()));
                         })
                         .flatMap(this::storePercentageInCache))
                 .map(percentage -> performCalculation(firstNumber, secondNumber, percentage))

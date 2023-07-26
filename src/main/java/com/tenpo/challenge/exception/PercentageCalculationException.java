@@ -1,7 +1,7 @@
 package com.tenpo.challenge.exception;
 
-public class PercentageEntityException extends Exception{
-    public PercentageEntityException(String message) {
+public class PercentageCalculationException extends Exception{
+    public PercentageCalculationException(String message) {
         super(message);
     }
 }

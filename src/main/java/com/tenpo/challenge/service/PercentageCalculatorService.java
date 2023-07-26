@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -49,9 +48,10 @@ public class PercentageCalculatorService {
                                     .map(PercentageCalculation::getPercentage)
                                     .onErrorMap(throwable -> new PercentageEntityException(throwable.getMessage()));
                         })
-                        .map(percentage -> performCalculation(firstNumber, secondNumber, percentage))
-                        .flatMap(this::savePercentageCalculation)
-                        .flatMap(this::storePercentageInCache));
+                        .flatMap(this::storePercentageInCache))
+                .map(percentage -> performCalculation(firstNumber, secondNumber, percentage))
+                .flatMap(this::savePercentageCalculation)
+                .map(PercentageCalculation::getResult);
     }
 
     private Mono<PercentageCalculation> savePercentageCalculation(PercentageCalculation percentageCalculation) {
@@ -60,17 +60,17 @@ public class PercentageCalculatorService {
                 .subscribeOn(Schedulers.boundedElastic())
                 .thenReturn(percentageCalculation)
                 .onErrorResume(throwable -> Mono.just(percentageCalculation))
-                .doOnError(throwable -> logger.error("An error ocurred when saving percentage calculation {} : {}", percentageCalculation, throwable.getMessage()));
+                .doOnError(throwable -> logger.error("An error occurred when saving percentage calculation {} : {}", percentageCalculation, throwable.getMessage()));
     }
 
-    private Mono<Double> storePercentageInCache(PercentageCalculation percentageCalculation) {
-        return redisTemplate.opsForValue().set("percentage", percentageCalculation.getPercentage(), Duration.ofMinutes(cacheDuration))
-                .doFirst(() -> logger.info("Storing into cache the following percentage {} with 30 minutes of duration.", percentageCalculation.getPercentage()))
-                .thenReturn(percentageCalculation.getPercentage())
-                .doOnError(throwable -> logger.error("An error ocurred when storing percentage into cache: {} ", throwable.getMessage()));
+    private Mono<Double> storePercentageInCache(Double percentage) {
+        return redisTemplate.opsForValue().set("percentage", percentage, Duration.ofMinutes(cacheDuration))
+                .doFirst(() -> logger.info("Storing into cache the following percentage {} with 30 minutes of duration.", percentage))
+                .thenReturn(percentage)
+                .doOnError(throwable -> logger.error("An error occurred when storing percentage into cache: {} ", throwable.getMessage()));
     }
 
-    private PercentageCalculation performCalculation(Double firstNumber, Double secondNumber, Double percentage){
+    private PercentageCalculation performCalculation(Double firstNumber, Double secondNumber, Double percentage) {
         Double sum = firstNumber + secondNumber;
         Double result = sum + sum * (percentage / 100);
         return new PercentageCalculation(percentage, firstNumber, secondNumber, result, Instant.now());

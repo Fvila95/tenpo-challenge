@@ -10,7 +10,7 @@ import org.springframework.data.redis.serializer.*;
 public class RedisConfiguration {
 
     @Bean
-    ReactiveRedisTemplate<String, Double> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
+    public ReactiveRedisTemplate<String, Double> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
         StringRedisSerializer keySerializer = new StringRedisSerializer();
         GenericToStringSerializer<Double> valueSerializer = new GenericToStringSerializer<>(Double.class);
 

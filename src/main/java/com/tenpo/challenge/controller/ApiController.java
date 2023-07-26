@@ -6,14 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/calculation")
 public class ApiController {
     private final PercentageCalculatorService percentageCalculatorService;
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
@@ -24,14 +21,13 @@ public class ApiController {
         this.percentageCalculatorService = percentageCalculatorService;
     }
 
-    @GetMapping("/calculate")
+    @PostMapping("")
     public Mono<Double> calculateSum(@RequestParam Double firstNumber, @RequestParam Double secondNumber) {
         logger.info("Calculating sum for numbers: {} and {}", firstNumber, secondNumber);
-        double sum = firstNumber + secondNumber;
         return percentageCalculatorService.calculatePercentage(firstNumber, secondNumber);
     }
 
-    @GetMapping("/index")
+    @GetMapping("")
     public Page<PercentageCalculation> getAllCalculations(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {

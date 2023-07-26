@@ -77,7 +77,7 @@ public class PercentageCalculatorService {
     }
 
 
-    public Page<PercentageCalculation> findAllCalculations(int page, int size) {
-        return percentageCalculationRepository.findAll(PageRequest.of(page, size));
+    public Mono<Page<PercentageCalculation>> findAllCalculations(int page, int size) {
+        return Mono.just(percentageCalculationRepository.findAll(PageRequest.of(page, size)));
     }
 }

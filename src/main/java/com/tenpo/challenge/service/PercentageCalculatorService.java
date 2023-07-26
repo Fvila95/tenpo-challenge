@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,5 +74,10 @@ public class PercentageCalculatorService {
         Double sum = firstNumber + secondNumber;
         Double result = sum + sum * (percentage / 100);
         return new PercentageCalculation(percentage, firstNumber, secondNumber, result, Instant.now());
+    }
+
+
+    public Page<PercentageCalculation> findAllCalculations(int page, int size) {
+        return percentageCalculationRepository.findAll(PageRequest.of(page, size));
     }
 }

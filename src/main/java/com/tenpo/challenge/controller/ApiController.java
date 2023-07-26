@@ -11,16 +11,16 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/")
 public class ApiController {
-    private final PercentageCalculatorService externalService;
+    private final PercentageCalculatorService percentageCalculatorService;
 
     @Autowired
-    public ApiController(PercentageCalculatorService externalService) {
-        this.externalService = externalService;
+    public ApiController(PercentageCalculatorService percentageCalculatorService) {
+        this.percentageCalculatorService = percentageCalculatorService;
     }
 
     @GetMapping("/api-rest")
-    public Mono<Double> calculateSum(@RequestParam double num1, @RequestParam double num2) {
-        double sum = num1 + num2;
-        return externalService.calculatePercentage().map(percentage -> sum + sum * (percentage / 100));
+    public Mono<Double> calculateSum(@RequestParam Double firstNumber, @RequestParam Double secondNumber) {
+        double sum = firstNumber + secondNumber;
+        return percentageCalculatorService.calculatePercentage(firstNumber, secondNumber).map(percentage -> sum + sum * (percentage / 100));
     }
 }

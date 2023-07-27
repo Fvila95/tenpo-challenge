@@ -29,7 +29,6 @@ class ExternalPercentageClientTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Mock the WebClient.Builder methods
         WebClient webClient = mock(WebClient.class);
         when(webClientBuilder.baseUrl(anyString())).thenReturn(webClientBuilder);
         when(webClientBuilder.build()).thenReturn(webClient);
@@ -38,7 +37,6 @@ class ExternalPercentageClientTest {
         when(requestHeadersUriSpec.uri("/percentage")).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
 
-        // Create the instance of ExternalPercentageClient
         externalPercentageClient = new ExternalPercentageClient(webClientBuilder);
     }
 
@@ -47,7 +45,6 @@ class ExternalPercentageClientTest {
         Double expectedPercentage = 10.0;
         when(responseSpec.bodyToMono(Double.class)).thenReturn(Mono.just(expectedPercentage));
 
-        // Add this line to mock the onStatus method chain
         when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
 
         Mono<Double> result = externalPercentageClient.getPercentage();

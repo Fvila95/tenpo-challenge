@@ -25,11 +25,12 @@ public class ApiController {
     }
 
     @PostMapping("")
-    public Mono<ResponseEntity<String>> calculateSum(@RequestParam Double firstNumber, @RequestParam Double secondNumber) {
+    public Mono<ResponseEntity<String>> calculateSum(@RequestParam Double firstNumber,
+                                                     @RequestParam Double secondNumber) {
         logger.info("Calculating sum for numbers: {} and {}", firstNumber, secondNumber);
         return percentageCalculatorService.calculatePercentage(firstNumber, secondNumber)
                 .map(result -> ResponseEntity.ok(result.toString()))
-                .onErrorResume(PercentageCalculationException.class, e -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unable to obtain any percentage to perform the calculation.")))
+                .onErrorResume(PercentageCalculationException.class, e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to obtain any percentage to perform the calculation.")))
                 .doOnError(throwable -> logger.error(throwable.getMessage()));
     }
 
@@ -41,7 +42,4 @@ public class ApiController {
         return percentageCalculatorService.findAllCalculations(page, size)
                 .doOnError(throwable -> logger.error(throwable.getMessage()));
     }
-
-
-
 }

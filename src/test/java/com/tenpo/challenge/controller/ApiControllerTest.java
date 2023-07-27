@@ -56,7 +56,7 @@ class ApiControllerTest {
         when(percentageCalculatorService.calculatePercentage(any(Double.class), any(Double.class))).thenReturn(Mono.error(new PercentageCalculationException("Percentage calculation error")));
 
         StepVerifier.create(apiController.calculateSum(firstNumber, secondNumber))
-                .expectNext(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unable to obtain any percentage to perform the calculation."))
+                .expectNext(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to obtain any percentage to perform the calculation."))
                 .verifyComplete();
     }
 

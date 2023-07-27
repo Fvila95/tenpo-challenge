@@ -27,7 +27,7 @@ mvn spring-boot:run
 ## Endpoints de la API
 Esta aplicación incluye los siguientes puntos finales:
 
-1. POST /tenpo-challenge/api/v1/calculation: Este endpoint acepta dos parámetros como entrada, 'firstNumber' y 'secondNumber', y devuelve el porcentaje del primer número con respecto al segundo. En caso de cualquier error, devuelve una respuesta HTTP 404 con un mensaje de error.
+1. POST /tenpo-challenge/api/v1/calculation: Este endpoint acepta dos parámetros como entrada, 'firstNumber' y 'secondNumber', y devuelve el porcentaje del primer número con respecto al segundo. En caso de cualquier error, devuelve una respuesta HTTP 400 con un mensaje de error.
 
 2. GET /tenpo-challenge/api/v1/calculation: Este endpoint devuelve una lista paginada de todos los porcentajes calculados previamente. Puedes controlar la paginación con los parámetros de consulta 'page' y 'size'.
 

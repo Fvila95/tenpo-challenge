@@ -4,6 +4,7 @@ Este proyecto es una aplicación Java basada en Spring Boot que proporciona el c
 
 ## Índice
 * [Primeros pasos](#primeros-pasos)
+* [Colección de Postman](#colección-de-postman)
 * [Endpoints de la API](#endpoints-de-la-api)
 * [Docker Compose](#docker-compose)
 * [Construido con](#construido-con)
@@ -23,6 +24,16 @@ mvn clean install
 ```
 mvn spring-boot:run
 ```
+
+## Colección de Postman
+Este proyecto incluye una colección de Postman que contiene ejemplos de llamadas a los endpoints de la API. Podes encontrar la colección en la carpeta `postman-collection`. Para usarla, sigue estos pasos:
+
+1. Abrir Postman
+2. Haz clic en "Importar"
+3. Elige "Importar desde archivo" y navega hasta el archivo de la colección en la carpeta `postman-collection`
+4. Haz clic en "Importar"
+
+Ahora deberías ver la colección de Postman en tu lista de colecciones y podrás usarla para probar los endpoints de la API.
 
 ## Endpoints de la API
 Esta aplicación incluye los siguientes puntos finales:

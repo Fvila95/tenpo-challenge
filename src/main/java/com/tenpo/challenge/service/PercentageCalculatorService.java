@@ -1,10 +1,13 @@
 package com.tenpo.challenge.service;
 
 import com.tenpo.challenge.client.ExternalPercentageClient;
+import com.tenpo.challenge.dto.PercentageCalculationDTO;
+import com.tenpo.challenge.dto.RequestNumbersDTO;
 import com.tenpo.challenge.exception.ExternalPercentageException;
 import com.tenpo.challenge.exception.PercentageCalculationException;
 import com.tenpo.challenge.model.PercentageCalculation;
 import com.tenpo.challenge.repository.PercentageCalculationRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ public class PercentageCalculatorService {
     private final ExternalPercentageClient externalPercentageClient;
     private static final Logger logger = LoggerFactory.getLogger(ExternalPercentageClient.class);
     private final Integer cacheDuration;
+    private final ModelMapper mapper;
 
 
     @Autowired
@@ -35,25 +39,31 @@ public class PercentageCalculatorService {
         this.percentageCalculationRepository = percentageCalculationRepository;
         this.externalPercentageClient = externalPercentageClient;
         this.cacheDuration = cacheDuration;
+        this.mapper = new ModelMapper();
     }
 
-    public Mono<Double> calculatePercentage(Double firstNumber, Double secondNumber) {
+    public Mono<Double> calculatePercentage(RequestNumbersDTO requestNumbersDTO) {
         return redisTemplate.opsForValue().get("percentage")
                 .doFirst(() -> logger.info("Searching percentage from cache."))
-                .switchIfEmpty(externalPercentageClient.getPercentage()
-                        .doFirst(() -> logger.info("Percentage isn't founded in the cache."))
-                        .onErrorResume(ExternalPercentageException.class, e -> {
-                            logger.error("An error occurred while calling the External Percentage Service: {}", e);
-                            return Mono.just(percentageCalculationRepository.findFirstByOrderByIdDesc())
-                                    .map(PercentageCalculation::getPercentage)
-                                    .onErrorMap(throwable -> new PercentageCalculationException(throwable.getMessage()));
-                        })
-                        .flatMap(this::storePercentageInCache))
-                .map(percentage -> performCalculation(firstNumber, secondNumber, percentage))
+                .switchIfEmpty(retrieveAndCachePercentage())
+                .map(percentage -> performCalculation(requestNumbersDTO, percentage))
                 .flatMap(this::savePercentageCalculation)
                 .map(PercentageCalculation::getResult);
     }
 
+    private Mono<Double> retrieveAndCachePercentage() {
+        return externalPercentageClient.getPercentage()
+                .doFirst(() -> logger.info("Percentage isn't founded in the cache."))
+                .onErrorResume(ExternalPercentageException.class, e -> {
+                    logger.error("An error occurred while calling the External Percentage Service: {}", e);
+                    return Mono.just(percentageCalculationRepository.findFirstByOrderByIdDesc())
+                            .map(PercentageCalculation::getPercentage)
+                            .onErrorMap(throwable -> new PercentageCalculationException(throwable.getMessage()));
+                })
+                .flatMap(this::storePercentageInCache);
+    }
+
+    //todo revisar.
     private Mono<PercentageCalculation> savePercentageCalculation(PercentageCalculation percentageCalculation) {
         return Mono.fromCallable(() -> percentageCalculationRepository.save(percentageCalculation))
                 .doFirst(() -> logger.info("Saving percentage calculation {}", percentageCalculation))
@@ -67,17 +77,23 @@ public class PercentageCalculatorService {
         return redisTemplate.opsForValue().set("percentage", percentage, Duration.ofMinutes(cacheDuration))
                 .doFirst(() -> logger.info("Storing into cache the following percentage {} with 30 minutes of duration.", percentage))
                 .thenReturn(percentage)
-                .doOnError(throwable -> logger.error("An error occurred when storing percentage into cache: {} ", throwable.getMessage()));
+                .doOnError(throwable -> logger.error("An error occurred when storing percentage into cache: {} ", throwable.getMessage()))
+                .onErrorResume(throwable -> Mono.just(percentage));
     }
 
-    private PercentageCalculation performCalculation(Double firstNumber, Double secondNumber, Double percentage) {
-        Double sum = firstNumber + secondNumber;
+    private PercentageCalculation performCalculation(RequestNumbersDTO requestNumbersDTO, Double percentage) {
+        Double sum = requestNumbersDTO.getFirstNumber() + requestNumbersDTO.getSecondNumber();
         Double result = sum + sum * (percentage / 100);
-        return new PercentageCalculation(percentage, firstNumber, secondNumber, result, Instant.now());
+        return new PercentageCalculation(percentage, requestNumbersDTO.getFirstNumber(), requestNumbersDTO.getSecondNumber(), result, Instant.now());
     }
 
 
-    public Mono<Page<PercentageCalculation>> findAllCalculations(int page, int size) {
-        return Mono.just(percentageCalculationRepository.findAll(PageRequest.of(page, size)));
+    //TODO: crear dto
+    public Mono<Page<PercentageCalculationDTO>> findAllCalculations(int page, int size) {
+        return Mono.just(percentageCalculationRepository.findAll(PageRequest.of(page, size)))
+                .map(percentageCalculations -> percentageCalculations.map(this::toDTO));
     }
-}
+
+    public PercentageCalculationDTO toDTO(PercentageCalculation entity) {
+        return mapper.map(entity, PercentageCalculationDTO.class);
+    }}

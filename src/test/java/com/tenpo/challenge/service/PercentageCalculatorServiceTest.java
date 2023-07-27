@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tenpo.challenge.client.ExternalPercentageClient;
+import com.tenpo.challenge.dto.PercentageCalculationDTO;
+import com.tenpo.challenge.dto.RequestNumbersDTO;
 import com.tenpo.challenge.model.PercentageCalculation;
 import com.tenpo.challenge.repository.PercentageCalculationRepository;
 import com.tenpo.challenge.utils.PageableResponse;
@@ -65,7 +67,7 @@ class PercentageCalculatorServiceTest {
         lenient().when(externalPercentageClient.getPercentage()).thenReturn(Mono.just(10.0));
         lenient().when(percentageCalculationRepository.save(any())).thenReturn(new PercentageCalculation(10.0, 1.0, 2.0, 3.3, Instant.now()));
 
-        Mono<Double> response = service.calculatePercentage(1.0, 2.0);
+        Mono<Double> response = service.calculatePercentage(new RequestNumbersDTO(1.0, 2.0));
 
         StepVerifier.create(response)
                 .expectNext(3.3)
@@ -88,15 +90,14 @@ class PercentageCalculatorServiceTest {
         when(percentageCalculationRepository.findAll(any(PageRequest.class)))
                 .thenReturn( page );
 
-        Mono<Page<PercentageCalculation>> response = service.findAllCalculations(0, 10);
+        Mono<Page<PercentageCalculationDTO>> response = service.findAllCalculations(0, 10);
 
         StepVerifier.create(response)
                 .assertNext(percentageCalculationPage -> {
-                    List<PercentageCalculation> content = percentageCalculationPage.getContent();
+                    List<PercentageCalculationDTO> content = percentageCalculationPage.getContent();
                     assertEquals(10, content.size());
 
-                    PercentageCalculation firstCalculation = content.get(0);
-                    assertEquals(1, firstCalculation.getId());
+                    PercentageCalculationDTO firstCalculation = content.get(0);
                     assertEquals(10, firstCalculation.getPercentage());
                     assertEquals(5, firstCalculation.getFirstNumber());
                     assertEquals(5, firstCalculation.getSecondNumber());

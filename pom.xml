@@ -15,6 +15,7 @@
 	<description>Challenge project for Tenpo</description>
 	<properties>
 		<java.version>17</java.version>
+		<jackson.version>2.14.2</jackson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -70,7 +71,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>

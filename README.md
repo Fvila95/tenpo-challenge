@@ -38,9 +38,9 @@ Ahora deberías ver la colección de Postman en tu lista de colecciones y podrá
 ## Endpoints de la API
 Esta aplicación incluye los siguientes puntos finales:
 
-1. POST /tenpo-challenge/api/v1/calculation: Este endpoint acepta dos parámetros como entrada, 'firstNumber' y 'secondNumber', y devuelve el porcentaje del primer número con respecto al segundo. En caso de cualquier error, devuelve una respuesta HTTP 400 con un mensaje de error.
+1. POST /tenpo-challenge/api/v1/calculator/sum-with-percentage: Este endpoint acepta un objecto con dos numeros como entrada (Ejemplo: {"firstNumber": 5, "secondNumber": 5}) y devuelve la suma de ambos numeros mas el porcentaje aplicado de ellos. En caso de cualquier error, devuelve una respuesta HTTP 400 con un mensaje de error.
 
-2. GET /tenpo-challenge/api/v1/calculation: Este endpoint devuelve una lista paginada de todos los porcentajes calculados previamente. Puedes controlar la paginación con los parámetros de consulta 'page' y 'size'.
+2. GET /tenpo-challenge/api/v1/calculator/history: Este endpoint devuelve una lista paginada de todos los porcentajes calculados previamente. Puedes controlar la paginación con los parámetros de consulta 'page' y 'size'.
 
 ## Docker Compose
 

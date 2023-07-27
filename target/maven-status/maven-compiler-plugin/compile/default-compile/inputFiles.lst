@@ -1,11 +1,14 @@
-/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/service/PercentageCalculatorService.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/exception/ExternalPercentageException.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/model/PercentageCalculation.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/aspect/RPMLimiterAspect.java
-/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/ChallengeApplication.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/configuration/RedisConfiguration.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/configuration/MockServerConfig.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/controller/ApiController.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/handler/GlobalExceptionHandler.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/exception/PercentageCalculationException.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/service/PercentageCalculatorService.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/ChallengeApplication.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/dto/PercentageCalculationDTO.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/repository/PercentageCalculationRepository.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/client/ExternalPercentageClient.java
-/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/exception/PercentageCalculationException.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/dto/RequestNumbersDTO.java

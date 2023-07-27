@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f03a4f8f-17bc-4176-8f9d-b898748e840a",
+		"_postman_id": "51686f57-02be-43a1-8f1b-b70b45b7df40",
 		"name": "tenpo-challenge",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,8 +10,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstNumber\":5,\n    \"secondNumber\":5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculation?firstNumber=1&secondNumber=45",
+					"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculator/sum-with-percentage",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -21,21 +30,71 @@
 						"tenpo-challenge",
 						"api",
 						"v1",
-						"calculation"
-					],
-					"query": [
-						{
-							"key": "firstNumber",
-							"value": "1"
-						},
-						{
-							"key": "secondNumber",
-							"value": "45"
-						}
+						"calculator",
+						"sum-with-percentage"
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Calcular la suma de dos numeros mas un porcentaje.",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstNumber\":5,\n    \"secondNumber\":5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculator/sum-with-percentage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tenpo-challenge",
+								"api",
+								"v1",
+								"calculator",
+								"sum-with-percentage"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Jul 2023 22:33:38 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "11.0"
+				}
+			]
 		},
 		{
 			"name": "Obtener el listado paginado de los cálculos realizados",
@@ -43,7 +102,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculation?page=0&size=10",
+					"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculator/history?page=0&size=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -53,7 +112,8 @@
 						"tenpo-challenge",
 						"api",
 						"v1",
-						"calculation"
+						"calculator",
+						"history"
 					],
 					"query": [
 						{
@@ -67,7 +127,67 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "Obtener el listado paginado de los cálculos realizados",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tenpo-challenge/api/v1/calculator/history?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tenpo-challenge",
+								"api",
+								"v1",
+								"calculator",
+								"history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 27 Jul 2023 22:33:44 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": [\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        },\n        {\n            \"percentage\": 10,\n            \"firstNumber\": 5,\n            \"secondNumber\": 5,\n            \"result\": 11,\n            \"timestamp\": \"2023-07-26T15:53:47.900187Z\"\n        }\n    ],\n    \"pageable\": {\n        \"sort\": {\n            \"empty\": true,\n            \"unsorted\": true,\n            \"sorted\": false\n        },\n        \"offset\": 0,\n        \"pageNumber\": 0,\n        \"pageSize\": 10,\n        \"paged\": true,\n        \"unpaged\": false\n    },\n    \"last\": false,\n    \"totalPages\": 2,\n    \"totalElements\": 20,\n    \"first\": true,\n    \"size\": 10,\n    \"number\": 0,\n    \"sort\": {\n        \"empty\": true,\n        \"unsorted\": true,\n        \"sorted\": false\n    },\n    \"numberOfElements\": 10,\n    \"empty\": false\n}"
+				}
+			]
 		}
 	]
 }

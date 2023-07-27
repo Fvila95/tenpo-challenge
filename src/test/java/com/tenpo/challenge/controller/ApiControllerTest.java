@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.tenpo.challenge.dto.PercentageCalculationDTO;
+import com.tenpo.challenge.dto.RequestNumbersDTO;
 import com.tenpo.challenge.exception.PercentageCalculationException;
 import com.tenpo.challenge.model.PercentageCalculation;
 import com.tenpo.challenge.service.PercentageCalculatorService;
@@ -37,25 +39,23 @@ class ApiControllerTest {
 
     @Test
     void calculateSum_Success() {
-        Double firstNumber = 5.0;
-        Double secondNumber = 5.0;
+        RequestNumbersDTO dto = new RequestNumbersDTO(5.0,5.0);
         Double expectedValue = 11.0;
 
-        when(percentageCalculatorService.calculatePercentage(any(Double.class), any(Double.class))).thenReturn(Mono.just(expectedValue));
+        when(percentageCalculatorService.calculatePercentage(any(RequestNumbersDTO.class))).thenReturn(Mono.just(expectedValue));
 
-        StepVerifier.create(apiController.calculateSum(firstNumber, secondNumber))
+        StepVerifier.create(apiController.calculateSum(dto))
                 .expectNext(ResponseEntity.ok(expectedValue.toString()))
                 .verifyComplete();
     }
 
     @Test
     void calculateSum_PercentageCalculationException() {
-        Double firstNumber = 2.0;
-        Double secondNumber = 3.0;
+        RequestNumbersDTO dto = new RequestNumbersDTO(2.0,3.0);
 
-        when(percentageCalculatorService.calculatePercentage(any(Double.class), any(Double.class))).thenReturn(Mono.error(new PercentageCalculationException("Percentage calculation error")));
+        when(percentageCalculatorService.calculatePercentage(any(RequestNumbersDTO.class))).thenReturn(Mono.error(new PercentageCalculationException("Percentage calculation error")));
 
-        StepVerifier.create(apiController.calculateSum(firstNumber, secondNumber))
+        StepVerifier.create(apiController.calculateSum(dto))
                 .expectNext(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to obtain any percentage to perform the calculation."))
                 .verifyComplete();
     }
@@ -66,9 +66,9 @@ class ApiControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.registerModule(new JavaTimeModule());
-        PageableResponse<PercentageCalculation> page = null;
+        PageableResponse<PercentageCalculationDTO> page = null;
         try {
-            page = mapper.readValue(expectedJson, mapper.getTypeFactory().constructParametricType(PageableResponse.class, PercentageCalculation.class));
+            page = mapper.readValue(expectedJson, mapper.getTypeFactory().constructParametricType(PageableResponse.class, PercentageCalculationDTO.class));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

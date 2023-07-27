@@ -1,3 +1,5 @@
+com/tenpo/challenge/handler/GlobalExceptionHandler.class
+com/tenpo/challenge/dto/PercentageCalculationDTO.class
 com/tenpo/challenge/exception/PercentageCalculationException.class
 com/tenpo/challenge/configuration/MockServerConfig.class
 com/tenpo/challenge/client/ExternalPercentageClient.class
@@ -5,6 +7,7 @@ com/tenpo/challenge/model/PercentageCalculation.class
 com/tenpo/challenge/aspect/RPMLimiterAspect$TooManyRequestsException.class
 com/tenpo/challenge/configuration/RedisConfiguration.class
 com/tenpo/challenge/exception/ExternalPercentageException.class
+com/tenpo/challenge/dto/RequestNumbersDTO.class
 com/tenpo/challenge/controller/ApiController.class
 com/tenpo/challenge/aspect/RPMLimiterAspect.class
 com/tenpo/challenge/service/PercentageCalculatorService.class

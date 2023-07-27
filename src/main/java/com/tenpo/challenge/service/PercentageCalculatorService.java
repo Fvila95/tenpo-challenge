@@ -48,7 +48,13 @@ public class PercentageCalculatorService {
                 .doFirst(() -> logger.info("Searching percentage from cache."))
                 .switchIfEmpty(retrieveAndCachePercentage())
                 .map(percentage -> performCalculation(requestNumbersDTO, percentage))
-                .flatMap(this::savePercentageCalculation)
+                .doOnNext(percentageCalculation -> savePercentageCalculation(percentageCalculation)
+                        .subscribeOn(Schedulers.boundedElastic())
+                        .subscribe(
+                                result -> logger.info("Successfully saved percentage calculation {}", result),
+                                throwable -> logger.error("An error occurred when saving percentage calculation: {}", throwable.getMessage())
+                        )
+                )
                 .map(PercentageCalculation::getResult);
     }
 
@@ -64,11 +70,9 @@ public class PercentageCalculatorService {
                 .flatMap(this::storePercentageInCache);
     }
 
-    //todo revisar.
     private Mono<PercentageCalculation> savePercentageCalculation(PercentageCalculation percentageCalculation) {
         return Mono.fromCallable(() -> percentageCalculationRepository.save(percentageCalculation))
                 .doFirst(() -> logger.info("Saving percentage calculation {}", percentageCalculation))
-                .subscribeOn(Schedulers.boundedElastic())
                 .thenReturn(percentageCalculation)
                 .onErrorResume(throwable -> Mono.just(percentageCalculation))
                 .doOnError(throwable -> logger.error("An error occurred when saving percentage calculation {} : {}", percentageCalculation, throwable.getMessage()));

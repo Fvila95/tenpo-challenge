@@ -1,3 +1,4 @@
+com/tenpo/challenge/handler/GlobalExceptionHandler.class
 com/tenpo/challenge/dto/PercentageCalculationDTO.class
 com/tenpo/challenge/exception/PercentageCalculationException.class
 com/tenpo/challenge/configuration/MockServerConfig.class

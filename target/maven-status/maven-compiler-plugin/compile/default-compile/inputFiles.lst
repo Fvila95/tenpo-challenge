@@ -4,6 +4,7 @@
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/configuration/RedisConfiguration.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/configuration/MockServerConfig.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/controller/ApiController.java
+/Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/handler/GlobalExceptionHandler.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/exception/PercentageCalculationException.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/service/PercentageCalculatorService.java
 /Users/fvila/workspace/tenpo-challenge/src/main/java/com/tenpo/challenge/ChallengeApplication.java

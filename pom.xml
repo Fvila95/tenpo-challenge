@@ -15,6 +15,7 @@
 	<description>Challenge project for Tenpo</description>
 	<properties>
 		<java.version>17</java.version>
+		<jackson.version>2.14.2</jackson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -73,10 +74,9 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.13.0</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>

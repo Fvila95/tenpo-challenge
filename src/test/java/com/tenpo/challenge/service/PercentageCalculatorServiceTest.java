@@ -95,7 +95,6 @@ class PercentageCalculatorServiceTest {
                     List<PercentageCalculation> content = percentageCalculationPage.getContent();
                     assertEquals(10, content.size());
 
-                    // Verify the first object for simplicity
                     PercentageCalculation firstCalculation = content.get(0);
                     assertEquals(1, firstCalculation.getId());
                     assertEquals(10, firstCalculation.getPercentage());

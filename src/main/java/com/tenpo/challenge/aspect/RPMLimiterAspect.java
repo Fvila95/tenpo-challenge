@@ -34,7 +34,7 @@ public class RPMLimiterAspect {
         String methodName = joinPoint.getSignature().getName();
         String controllerName = joinPoint.getTarget().getClass().getSimpleName();
 
-        String redisKey = "RPM:" + getClientIp();
+        String redisKey = "RPM";
 
         return reactiveRedisTemplate.opsForValue().increment(redisKey, 1.0)
                 .flatMap(count -> {
@@ -66,13 +66,6 @@ public class RPMLimiterAspect {
                     return Mono.just(ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage()));
                 });
     }
-
-    private String getClientIp() {
-        return "127.0.0.1";
-    }
-
-    // Custom exception for handling too many requests
-//    @SuppressWarnings("serial")
     public static class TooManyRequestsException extends RuntimeException {
         public TooManyRequestsException(String message) {
             super(message);

@@ -25,6 +25,7 @@ import java.time.Instant;
 @Service
 public class PercentageCalculatorService {
 
+    public static final String PERCENTAGE_KEY = "percentage";
     private final ReactiveRedisTemplate<String, Double> redisTemplate;
     private final PercentageCalculationRepository percentageCalculationRepository;
     private final ExternalPercentageClient externalPercentageClient;
@@ -43,7 +44,7 @@ public class PercentageCalculatorService {
     }
 
     public Mono<Double> calculatePercentage(RequestNumbersDTO requestNumbersDTO) {
-        return redisTemplate.opsForValue().get("percentage")
+        return redisTemplate.opsForValue().get(PERCENTAGE_KEY)
                 .doFirst(() -> logger.info("Searching percentage from cache."))
                 .switchIfEmpty(retrieveAndCachePercentage())
                 .map(percentage -> performCalculation(requestNumbersDTO, percentage))
@@ -74,7 +75,7 @@ public class PercentageCalculatorService {
     }
 
     private Mono<Double> storePercentageInCache(Double percentage) {
-        return redisTemplate.opsForValue().set("percentage", percentage, Duration.ofMinutes(cacheDuration))
+        return redisTemplate.opsForValue().set(PERCENTAGE_KEY, percentage, Duration.ofMinutes(cacheDuration))
                 .doFirst(() -> logger.info("Storing into cache the following percentage {} with 30 minutes of duration.", percentage))
                 .thenReturn(percentage)
                 .doOnError(throwable -> logger.error("An error occurred when storing percentage into cache: {} ", throwable.getMessage()))
@@ -87,8 +88,6 @@ public class PercentageCalculatorService {
         return new PercentageCalculation(percentage, requestNumbersDTO.getFirstNumber(), requestNumbersDTO.getSecondNumber(), result, Instant.now());
     }
 
-
-    //TODO: crear dto
     public Mono<Page<PercentageCalculationDTO>> findAllCalculations(int page, int size) {
         return Mono.just(percentageCalculationRepository.findAll(PageRequest.of(page, size)))
                 .map(percentageCalculations -> percentageCalculations.map(this::toDTO));

@@ -13,7 +13,7 @@ Para tener una copia local en funcionamiento, sigue estos sencillos pasos:
 
 1. Clonar el repositorio
 ```
-git clone https://github.com/Fvila95/tenpo-challenge.git
+git clone https://github.com/your_username/tenpo-challenge.git
 ```
 2. Construir el proyecto
 ```

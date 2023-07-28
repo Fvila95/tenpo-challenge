@@ -1,11 +1,11 @@
 FROM maven:3.8.1-openjdk-17-slim AS build
-WORKDIR /home/app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean install
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
 FROM openjdk:17.0.1-jdk-slim
-WORKDIR /home/app
 COPY --from=build /home/app/target/*.jar app.jar
+COPY wait-for-it.sh ./
+RUN chmod +x wait-for-it.sh
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+CMD ["./wait-for-it.sh", "mockserver:1080", "--", "java","-jar","app.jar"]

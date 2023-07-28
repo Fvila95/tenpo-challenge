@@ -16,6 +16,12 @@ public class MockServerConfig {
 
     @PostConstruct
     public void setupMockServer() {
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         MockServerClient mockServer = new MockServerClient("localhost", port);
         mockServer.when(HttpRequest.request()
                         .withMethod("GET")

@@ -6,7 +6,7 @@ Este proyecto es una aplicación Java basada en Spring Boot que proporciona el c
 * [Primeros pasos](#primeros-pasos)
 * [Colección de Postman](#colección-de-postman)
 * [Endpoints de la API](#endpoints-de-la-api)
-* [Docker Compose](#docker-compose)
+* [Imagen de docker](#imagen-de-docker)
 * [Construido con](#construido-con)
 
 ## Primeros pasos

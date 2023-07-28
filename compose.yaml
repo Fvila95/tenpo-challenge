@@ -28,6 +28,11 @@ services:
     ports:
       - 1080:1080
     command: -logLevel INFO
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:1080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   redis:
     image: 'redis:latest'

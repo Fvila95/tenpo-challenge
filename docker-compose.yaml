@@ -14,6 +14,8 @@ services:
       - postgres
       - mockserver
       - redis
+    networks:
+      - backend
 
   postgres:
     image: 'postgres:latest'
@@ -23,14 +25,24 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432:5432'
+    networks:
+      - backend
 
   mockserver:
     image: mockserver/mockserver
     ports:
       - 1080:1080
-    command: -logLevel INFO
+    command: -logLevel DEBUG
+    networks:
+      - backend
 
   redis:
     image: 'redis:latest'
     ports:
       - '6379:6379'
+    networks:
+      - backend
+
+
+networks:
+  backend:

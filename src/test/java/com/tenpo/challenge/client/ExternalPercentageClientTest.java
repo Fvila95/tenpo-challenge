@@ -37,7 +37,7 @@ class ExternalPercentageClientTest {
         when(requestHeadersUriSpec.uri("/percentage")).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
 
-        externalPercentageClient = new ExternalPercentageClient(webClientBuilder);
+        externalPercentageClient = new ExternalPercentageClient(webClientBuilder,"");
     }
 
     @Test

@@ -61,8 +61,8 @@ public class PercentageCalculatorService {
     private Mono<Double> retrieveAndCachePercentage() {
         return externalPercentageClient.getPercentage()
                 .doFirst(() -> logger.info("Percentage isn't founded in the cache."))
-                .onErrorResume(ExternalPercentageException.class, e -> {
-                    logger.error("An error occurred while calling the External Percentage Service: {}", e);
+                .onErrorResume(exception -> {
+                    logger.error("An error occurred while calling the External Percentage Service: {}", exception);
                     return Mono.just(percentageCalculationRepository.findFirstByOrderByIdDesc())
                             .map(PercentageCalculation::getPercentage)
                             .onErrorMap(throwable -> new PercentageCalculationException(throwable.getMessage()));

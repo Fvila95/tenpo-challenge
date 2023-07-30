@@ -6,24 +6,23 @@ Este proyecto es una aplicación Java basada en Spring Boot que proporciona el c
 * [Primeros pasos](#primeros-pasos)
 * [Colección de Postman](#colección-de-postman)
 * [Endpoints de la API](#endpoints-de-la-api)
-* [Imagen de docker](#imagen-de-docker)
 * [Construido con](#construido-con)
 
 ## Primeros pasos
 Para tener una copia local en funcionamiento, sigue estos sencillos pasos:
 
-1. Clonar el repositorio
+1. Instalar docker y docker-compose.
+
+2. Clonar el repositorio
 ```
 git clone https://github.com/your_username/tenpo-challenge.git
 ```
-2. Construir el proyecto
+3. Ejecutar el proyecto con docker-compose utilizando estos dos comandos.
 ```
-mvn clean install
+docker-compose build
+docker-compose up
 ```
-3. Ejecutar la aplicación.
-```
-mvn spring-boot:run
-```
+Nota: dentro del docker-compose.yaml esta especificada la imagen del servicio que esta disponible publicamente en [dockerhub](https://hub.docker.com/layers/fvila31/tenpo-challenge/v1/images/sha256-3e43690abae7159ec4a85c1a4bf453dbb3e863e5c97f3c99b340dec6d9cefd2d?context=repo).
 
 ## Colección de Postman
 Este proyecto incluye una colección de Postman que contiene ejemplos de llamadas a los endpoints de la API. Podes encontrar la colección en la carpeta `postman-collection`. Para usarla, sigue estos pasos:
@@ -42,40 +41,10 @@ Esta aplicación incluye los siguientes puntos finales:
 
 2. GET /tenpo-challenge/api/v1/calculator/history: Este endpoint devuelve una lista paginada de todos los porcentajes calculados previamente. Puedes controlar la paginación con los parámetros de consulta 'page' y 'size'.
 
-## Docker Compose
-
-Este proyecto utiliza Docker Compose para manejar sus servicios. Aquí está la configuración:
-
-```
-services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
-    ports:
-      - '5432:5432'
-  mockserver:
-    image: mockserver/mockserver
-    ports:
-      - 1080:1080
-    command: -logLevel INFO
-  redis:
-    image: 'redis:latest'
-    ports:
-      - '6379:6379'
-```
-
-Para ejecutar los servicios con Docker Compose, simplemente ejecuta:
-
-```
-docker-compose up
-```
-
 ## Construido con 
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Reactor Core](https://projectreactor.io/)
+* [Docker](https://www.docker.com/)
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Postgres](https://www.postgresql.org/)
 * [Redis](https://redis.io/)

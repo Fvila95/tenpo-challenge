@@ -1,6 +1,6 @@
 services:
   app:
-    image: tenpo-challenge:v1
+    image: fvila31/tenpo-challenge:v1
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,5 +1,6 @@
 services:
   app:
+    image: tenpo-challenge:v1
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,6 +14,8 @@ services:
       - postgres
       - mockserver
       - redis
+    networks:
+      - backend
 
   postgres:
     image: 'postgres:latest'
@@ -22,19 +25,24 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432:5432'
+    networks:
+      - backend
 
   mockserver:
     image: mockserver/mockserver
     ports:
       - 1080:1080
-    command: -logLevel INFO
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:1080" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    command: -logLevel DEBUG
+    networks:
+      - backend
 
   redis:
     image: 'redis:latest'
     ports:
       - '6379:6379'
+    networks:
+      - backend
+
+
+networks:
+  backend:

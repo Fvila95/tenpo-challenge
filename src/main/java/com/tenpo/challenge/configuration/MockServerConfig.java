@@ -14,15 +14,12 @@ public class MockServerConfig {
     @Value("${mockserver.port}")
     private int port;
 
+    @Value("${mockserver.host}")
+    private String host;
+
     @PostConstruct
     public void setupMockServer() {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        MockServerClient mockServer = new MockServerClient("localhost", port);
+        MockServerClient mockServer = new MockServerClient(host, port);
         mockServer.when(HttpRequest.request()
                         .withMethod("GET")
                         .withPath("/percentage"))
